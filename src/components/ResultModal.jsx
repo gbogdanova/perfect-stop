@@ -1,7 +1,9 @@
 import { useImperativeHandle, useRef} from "react"
 
-export default function ResultModal ({ref,result, targetTime}) {
+export default function ResultModal ({ref, targetTime, remainingTime, onReset}) {
   const dialog = useRef();
+
+  const secondsLeft = (remainingTime / 1000).toFixed(2)
 
   useImperativeHandle(ref, () => {
     return {
@@ -13,14 +15,14 @@ export default function ResultModal ({ref,result, targetTime}) {
 
   return (
     <dialog ref={dialog} className="result-modal">
-      <h2>You {result}</h2>
+      {remainingTime <= 0 ? <h2>You lost</h2> : <h2>You won</h2>}
       <p>
         The target time was <strong>{targetTime}</strong>
       </p>
       <p>
-        You stopped the timer with <strong>X seconds left.</strong>
+        You stopped the timer with <strong>{secondsLeft} seconds left.</strong>
       </p>
-      <form method="dialog">
+      <form method="dialog" onSubmit={onReset}>
         <button>Close</button>
       </form>
     </dialog>
